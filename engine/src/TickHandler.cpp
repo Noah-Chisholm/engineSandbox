@@ -1,0 +1,52 @@
+#include "TickHandler.h"
+#include "globalFUnctions.h"
+#include "tickableObject.h"
+
+tickHandler::tickHandler() {
+    lastFrameTime = 0.0;
+    lastTickStart = std::chrono::steady_clock::now();
+}
+
+float tickHandler::tick() {
+    using clock = std::chrono::steady_clock;
+
+    auto startTime = clock::now();
+
+    // dt between ticks
+    std::chrono::duration<float> dt = startTime - lastTickStart;
+    lastTickStart = startTime;
+
+    log("DT: {}", dt.count());
+
+    for (auto* obj : tickableObjects) {
+        obj->tick(dt.count());
+    }
+
+    // how long THIS tick took to execute
+    std::chrono::duration<float> frameTime = clock::now() - startTime;
+    lastFrameTime = frameTime.count();
+
+    log("Tick length: {}", lastFrameTime);
+    return lastFrameTime;
+}
+
+bool tickHandler::registerTick(tickableObject* registrant) {
+    tickableObjects.push_back(registrant);
+    return true;
+}
+
+bool tickHandler::unregisterTick(tickableObject* registrant) {
+    int counter = 0;
+    for (auto obj : tickableObjects)
+        if (obj == registrant) {
+            tickableObjects.erase(tickableObjects.begin() + counter);
+            return true;
+        } else counter++;
+    return false;
+}
+
+tickHandler& tickHandler::getHandler()
+{
+    static tickHandler inst;
+    return inst;
+}
