@@ -7,8 +7,8 @@ class tickableObject;
 
 class tickHandler {
 public:
-    bool registerTick(tickableObject* registrant);
-    bool unregisterTick(tickableObject* registrant);
+    bool registerTick(std::shared_ptr<tickableObject> registrant);
+    bool unregisterTick(std::shared_ptr<tickableObject> registrant);
     static tickHandler& getHandler();
     float tick();
 
@@ -18,5 +18,5 @@ private:
 
     std::chrono::time_point<std::chrono::steady_clock> lastTickStart;
     float lastFrameTime;
-    std::vector<tickableObject*> tickableObjects;
+    std::vector<std::shared_ptr<tickableObject>> tickableObjects;
 };

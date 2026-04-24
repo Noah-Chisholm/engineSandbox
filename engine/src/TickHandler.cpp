@@ -1,5 +1,5 @@
 #include "TickHandler.h"
-#include "globalFUnctions.h"
+#include "logging.h"
 #include "tickableObject.h"
 
 tickHandler::tickHandler() {
@@ -16,9 +16,9 @@ float tickHandler::tick() {
     std::chrono::duration<float> dt = startTime - lastTickStart;
     lastTickStart = startTime;
 
-    log("DT: {}", dt.count());
+    // log("DT: {}", dt.count());
 
-    for (auto* obj : tickableObjects) {
+    for (auto obj : tickableObjects) {
         obj->tick(dt.count());
     }
 
@@ -26,16 +26,17 @@ float tickHandler::tick() {
     std::chrono::duration<float> frameTime = clock::now() - startTime;
     lastFrameTime = frameTime.count();
 
-    log("Tick length: {}", lastFrameTime);
+    // 
+    // ("Tick length: {}", lastFrameTime);
     return lastFrameTime;
 }
 
-bool tickHandler::registerTick(tickableObject* registrant) {
+bool tickHandler::registerTick(std::shared_ptr<tickableObject> registrant) {
     tickableObjects.push_back(registrant);
     return true;
 }
 
-bool tickHandler::unregisterTick(tickableObject* registrant) {
+bool tickHandler::unregisterTick(std::shared_ptr<tickableObject> registrant) {
     int counter = 0;
     for (auto obj : tickableObjects)
         if (obj == registrant) {
