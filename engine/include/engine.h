@@ -9,6 +9,7 @@
 #include "GameWindowHandler.h"
 #include "inputTester.h"
 #include "circularQueue.h"
+#include "renderHandler.h"
 #include "engineEvents.h"
 #include "world.h"
 
@@ -17,6 +18,7 @@ private:
     tickHandler& mainTickHandler = tickHandler::getHandler();
     GameWindowHandler& mainGameWindow = GameWindowHandler::getInstance();
     inputHandler& mainInputHandler = inputHandler::getInstance();
+    renderHandler& mainRenderHandler = renderHandler::getInstance();
 
 
     void gameplayLoop();

@@ -12,7 +12,7 @@ void engine::gameplayLoop() {
     
 void engine::startEngine() {
     activeWorld = std::make_unique<world>();
-    mainGameWindow.initWindow(defaultWindowW, defaultWindowH);
+    mainRenderHandler.init(defaultWindowW, defaultWindowH, mainGameWindow.initWindow(defaultWindowW, defaultWindowH));
     activeWorld->spawnObject<inputTester>(nullptr, "Tester");
     gameplayLoop();
 }

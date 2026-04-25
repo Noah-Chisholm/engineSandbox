@@ -12,6 +12,7 @@ add_library(engineSandbox STATIC
   engine/src/inputTester.cpp
   engine/src/engine.cpp
   engine/src/world.cpp
+  engine/src/renderHandler.cpp
  )
 
 target_compile_features(engineSandbox PUBLIC cxx_std_20)
@@ -23,7 +24,7 @@ target_include_directories(engineSandbox PUBLIC
 # ---- app executable ----
 add_executable(app app/src/main.cpp)
 
-target_link_libraries(engineSandbox PUBLIC d3d11 dxgi D3DCompiler)
+target_link_libraries(engineSandbox PUBLIC d3d12 dxgi D3DCompiler)
 target_link_libraries(app PRIVATE engineSandbox)
 
 # ---- compiler/sanitizer flags (AFTER targets exist) ----
