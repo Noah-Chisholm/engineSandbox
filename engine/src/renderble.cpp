@@ -5,7 +5,6 @@
 renderable::renderable(name _str, std::shared_ptr<meshDataGPU> _mesh, transform _transform)
 	: baseObject(_str),
 	sceneInterface(_transform),
-	tickableInterface(),
 	mesh(_mesh)
 {
 }
@@ -21,10 +20,9 @@ void renderable::setVisible(bool newVisible) {
 }
 
 void renderable::init() {
+	baseObject::init();
 	renderHandler::getInstance().createRenderableConstantBuffer(*this);
-
 	setVisible(true);
-	setActive(true);
 }
 
 DirectX::XMFLOAT4X4 renderable::makeModelMatrix(const transform& trans) {
@@ -56,16 +54,4 @@ DirectX::XMFLOAT4X4 renderable::makeModelMatrix(const transform& trans) {
 	DirectX::XMStoreFloat4x4(&result, model);
 
 	return result;
-}
-
-void renderable::tick(float dt) {
-	trans.location.x += vel;
-	if (trans.location.x >= 1 || trans.location.x <= -1)
-		vel *= -1;
-	trans.scale.x += scaleSpeed;
-	trans.scale.y += scaleSpeed;
-	if (trans.scale.x >= 1.5 || trans.scale.x <= 0.5)
-		scaleSpeed *= -1;
-
-	trans.rotation.z += rotSpeed;
 }

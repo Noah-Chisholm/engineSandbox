@@ -27,7 +27,7 @@ namespace input {
 		union {
 			struct { uint32_t vk; } key;                 // KeyDown/Up
 			struct { EMouseInputTypes button; int32_t x, y; } mouseBtn; // MouseDown/Up
-			struct { int32_t x, y; } mouseMove;           // MouseMove
+			struct { int32_t x, y; int32_t deltaX, deltaY; } mouseMove;           // MouseMove
 			struct { int32_t delta; int32_t x, y; } wheel;// MouseWheel
 		};
 	};

@@ -26,7 +26,6 @@ float tickHandler::tick() {
     std::chrono::duration<float> frameTime = clock::now() - startTime;
     lastFrameTime = frameTime.count();
 
-    // 
     // ("Tick length: {}", lastFrameTime);
     return lastFrameTime;
 }

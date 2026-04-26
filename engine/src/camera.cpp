@@ -14,18 +14,19 @@ DirectX::XMMATRIX camera::makeViewMatrix() const {
         trans.location.z,
         1.0f
     );
-
+    fVector forwardVector = getForwardVector();
     DirectX::XMVECTOR forwardDirection = DirectX::XMVectorSet(
-        0.0f,
-        0.0f,
-        1.0f,
+        forwardVector.x,
+        forwardVector.y,
+        forwardVector.z,
         0.0f
     );
 
+    fVector upVector = getUpVector();
     DirectX::XMVECTOR upDirection = DirectX::XMVectorSet(
-        0.0f,
-        1.0f,
-        0.0f,
+        upVector.x,
+        upVector.y,
+        upVector.z,
         0.0f
     );
 

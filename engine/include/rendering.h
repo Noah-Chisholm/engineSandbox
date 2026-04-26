@@ -5,25 +5,8 @@
 #include <dxgi1_4.h>
 #include <wrl/client.h>
 #include "name.h"
+#include "fVector.h"
 #include <DirectXMath.h>
-
-struct fVector {
-	float x = 0.0f;
-	float y = 0.0f;
-	float z = 0.0f;
-
-	fVector() = default;
-
-	explicit fVector(float i)
-		: x(i), y(i), z(i)
-	{
-	}
-
-	fVector(float inX, float inY, float inZ)
-		: x(inX), y(inY), z(inZ)
-	{
-	}
-};
 
 struct Vertex {
 	fVector position;

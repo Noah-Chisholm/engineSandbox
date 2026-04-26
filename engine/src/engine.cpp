@@ -1,5 +1,5 @@
 #include "engine.h"
-#include "camera.h"
+#include "cameraController.h"
 #include "renderable.h"
 #include <numbers>
 
@@ -30,10 +30,10 @@ void engine::startEngine() {
         defaultWindowW,
         defaultWindowH
     );
-    auto defaultCamera = static_pointer_cast<camera>(activeWorld->spawnObject<camera>(nullptr, name("mainCamera"), defaultCameraTrans, defaultCameraData));
+    auto defaultCamera = static_pointer_cast<camera>(activeWorld->spawnObject<cameraController>(nullptr, name("mainCamera"), defaultCameraTrans, defaultCameraData));
     mainRenderHandler.init(defaultWindowW, defaultWindowH, mainGameWindow.initWindow(defaultWindowW, defaultWindowH), defaultCamera);
+    
     transform testTriTrans = { fVector(0.0f,0.0f,10.0f), fVector((45 * std::numbers::pi / 180),0.0f,0.0f), fVector(1.0f, 1.0f, 1.0f) };
-    transform testTri2Trans = { fVector(10.0f,0.0f,50.0f), fVector((45 * std::numbers::pi / 180),0.0f,0.0f), fVector(1.0f, 1.0f, 1.0f)};
     meshDataCPU testCube = {
         name("cubeModel"),
         {
@@ -75,8 +75,9 @@ void engine::startEngine() {
             3, 6, 7
         }
     };
+
     activeWorld->spawnObject<renderable>(nullptr, name("testTri"), mainRenderHandler.createGpuMesh(testCube), testTriTrans);
-    activeWorld->spawnObject<renderable>(nullptr, name("testTri2"), mainRenderHandler.createGpuMesh(testCube), testTri2Trans);
+    
     activeWorld->spawnObject<inputTester>(nullptr, name("Tester"));
     gameplayLoop();
 }

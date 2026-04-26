@@ -14,7 +14,7 @@ add_library(engineSandbox STATIC
   "engine/src/world.cpp"
   "engine/src/renderHandler.cpp"
   "engine/src/renderble.cpp"
-  "engine/src/sceneInterface.cpp" "engine/src/camera.cpp" "engine/src/name.cpp")
+  "engine/src/sceneInterface.cpp" "engine/src/camera.cpp" "engine/src/name.cpp" "engine/src/cameraController.cpp")
 
 target_compile_features(engineSandbox PUBLIC cxx_std_20)
 
