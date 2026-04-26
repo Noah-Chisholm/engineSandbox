@@ -1,10 +1,10 @@
 #include "baseObject.h"
 
-baseObject::baseObject(std::string name) : name(name) {
+baseObject::baseObject(name _str) : _name(_str) {
 }
 
 std::string baseObject::toString() {
-	return name;
+	return _name.getString();
 }
 
 float baseObject::HeavyComputations(int numIterations) {

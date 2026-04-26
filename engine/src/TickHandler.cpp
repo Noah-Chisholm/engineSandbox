@@ -1,6 +1,6 @@
 #include "TickHandler.h"
 #include "logging.h"
-#include "tickableObject.h"
+#include "tickableInterface.h"
 
 tickHandler::tickHandler() {
     lastFrameTime = 0.0;
@@ -31,12 +31,12 @@ float tickHandler::tick() {
     return lastFrameTime;
 }
 
-bool tickHandler::registerTick(std::shared_ptr<tickableObject> registrant) {
+bool tickHandler::registerTick(std::shared_ptr<tickableInterface> registrant) {
     tickableObjects.push_back(registrant);
     return true;
 }
 
-bool tickHandler::unregisterTick(std::shared_ptr<tickableObject> registrant) {
+bool tickHandler::unregisterTick(std::shared_ptr<tickableInterface> registrant) {
     int counter = 0;
     for (auto obj : tickableObjects)
         if (obj == registrant) {

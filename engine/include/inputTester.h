@@ -1,17 +1,18 @@
 #pragma once
 
 #include "InputHandler.h"
-#include "tickableObject.h"
+#include "baseObject.h"
+#include "tickableInterface.h"
+#include "name.h"
 
-class inputTester : public tickableObject {
+class inputTester : public baseObject, public tickableInterface {
 public:
-	inputTester(std::string name, bool isActive = true);
+	inputTester(name _str, bool isActive = true);
 
 	void handleInput(const FInputEvent& event);
 
-	void swapRenderColor(const FInputEvent& event);
-
 	virtual void tick(float dt) override;
+	virtual void init() override;
 
 private:
 	inputHandler::inputEventSig myDelegate;

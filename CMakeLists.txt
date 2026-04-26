@@ -3,17 +3,18 @@
 project(engineSandbox LANGUAGES CXX)
 
 add_library(engineSandbox STATIC
-  engine/src/tickHandler.cpp
-  engine/src/InputHandler.cpp
-  engine/src/GameWindowHandler.cpp
-  engine/src/baseObject.cpp
-  engine/src/tickableObject.cpp
-  engine/src/logging.cpp
-  engine/src/inputTester.cpp
-  engine/src/engine.cpp
-  engine/src/world.cpp
-  engine/src/renderHandler.cpp
- )
+  "engine/src/tickHandler.cpp"
+  "engine/src/InputHandler.cpp"
+  "engine/src/GameWindowHandler.cpp"
+  "engine/src/baseObject.cpp"
+  "engine/src/tickableInterface.cpp"
+  "engine/src/logging.cpp"
+  "engine/src/inputTester.cpp"
+  "engine/src/engine.cpp"
+  "engine/src/world.cpp"
+  "engine/src/renderHandler.cpp"
+  "engine/src/renderble.cpp"
+  "engine/src/sceneInterface.cpp" "engine/src/camera.cpp" "engine/src/name.cpp")
 
 target_compile_features(engineSandbox PUBLIC cxx_std_20)
 

@@ -3,7 +3,8 @@
 #include "delegates.h"
 #include "logging.h"
 
-inputTester::inputTester(std::string name, bool isActive) : tickableObject(name, isActive) {
+inputTester::inputTester(name _str, bool _isActive) : baseObject(_str) {
+	isActive != _isActive;
 	myDelegate = inputHandler::inputEventSig::Bind<inputTester, &inputTester::handleInput>(&(*this));
 	inputHandler::getInstance().registerForAnyKeyEvent(myDelegate);
 	inputHandler::getInstance().registerForKeyEvent('C', handleCDel);
@@ -30,4 +31,8 @@ void inputTester::handleInput(const FInputEvent& event) {
 
 void inputTester::tick(float dt) {
 	//log("tick is active\n");
+}
+
+void inputTester::init() {
+	setActive(!isActive);
 }
