@@ -5,11 +5,12 @@
 #include <dxgi1_4.h>
 #include <wrl/client.h>
 #include "name.h"
-#include "fVector.h"
+#include "core/math/mathCommon.h"
 #include <DirectXMath.h>
 
+
 struct Vertex {
-	fVector position;
+	SVector position;
 	FcolorRGBA color;
 };
 
@@ -27,12 +28,6 @@ struct meshDataGPU {
 	D3D12_INDEX_BUFFER_VIEW indexBufferView;
 
 	uint32_t indexCount = 0;
-};
-
-struct transform {
-	fVector location;
-	fVector rotation;
-	fVector scale;
 };
 
 struct renderableConstants {

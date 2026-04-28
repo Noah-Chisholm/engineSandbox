@@ -1,5 +1,5 @@
 #include "GameWindowHandler.h"
-#include "InputHandler.h"
+#include "input/inputHandler.h"
 #include "engine.h"
 
 #include <windowsx.h>
@@ -111,159 +111,159 @@ LRESULT CALLBACK GameWindowHandler::handleWindowMessages(
     }
 
     case WM_KEYDOWN: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::KeyDown;
-        event.mods = PollActiveModifiers();
+        event.mods.setRawValue(PollActiveModifiers());
         event.key.vk = static_cast<uint32_t>(wParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_KEYUP: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::KeyUp;
-        event.mods = PollActiveModifiers();
+        event.mods.setRawValue(PollActiveModifiers());
         event.key.vk = static_cast<uint32_t>(wParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_LBUTTONDOWN: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseDown;
-        event.mods = PollActiveModifiers();
-        event.mouseBtn.button = input::EMouseInputTypes::Left;
+        event.mods.setRawValue(PollActiveModifiers());
+        event.mouseBtn.button = input::EMouseInputType::Left;
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_RBUTTONDOWN: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseDown;
-        event.mods = PollActiveModifiers();
-        event.mouseBtn.button = input::EMouseInputTypes::Right;
+        event.mods.setRawValue(PollActiveModifiers());
+        event.mouseBtn.button = input::EMouseInputType::Right;
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_MBUTTONDOWN: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseDown;
-        event.mods = PollActiveModifiers();
-        event.mouseBtn.button = input::EMouseInputTypes::Middle;
+        event.mods.setRawValue(PollActiveModifiers());
+        event.mouseBtn.button = input::EMouseInputType::Middle;
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_XBUTTONDOWN: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseDown;
-        event.mods = PollActiveModifiers();
+        event.mods.setRawValue(PollActiveModifiers());
 
         WORD xbtn = GET_XBUTTON_WPARAM(wParam);
 
         event.mouseBtn.button =
             (xbtn == XBUTTON1)
-            ? input::EMouseInputTypes::X1
-            : input::EMouseInputTypes::X2;
+            ? input::EMouseInputType::X1
+            : input::EMouseInputType::X2;
 
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_LBUTTONUP: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseUp;
-        event.mods = PollActiveModifiers();
-        event.mouseBtn.button = input::EMouseInputTypes::Left;
+        event.mods.setRawValue(PollActiveModifiers());
+        event.mouseBtn.button = input::EMouseInputType::Left;
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_RBUTTONUP: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseUp;
-        event.mods = PollActiveModifiers();
-        event.mouseBtn.button = input::EMouseInputTypes::Right;
+        event.mods.setRawValue(PollActiveModifiers());
+        event.mouseBtn.button = input::EMouseInputType::Right;
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_MBUTTONUP: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseUp;
-        event.mods = PollActiveModifiers();
-        event.mouseBtn.button = input::EMouseInputTypes::Middle;
+        event.mods.setRawValue(PollActiveModifiers());
+        event.mouseBtn.button = input::EMouseInputType::Middle;
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_XBUTTONUP: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseUp;
-        event.mods = PollActiveModifiers();
+        event.mods.setRawValue(PollActiveModifiers());
 
         WORD xbtn = GET_XBUTTON_WPARAM(wParam);
 
         event.mouseBtn.button =
             (xbtn == XBUTTON1)
-            ? input::EMouseInputTypes::X1
-            : input::EMouseInputTypes::X2;
+            ? input::EMouseInputType::X1
+            : input::EMouseInputType::X2;
 
         event.mouseBtn.x = GET_X_LPARAM(lParam);
         event.mouseBtn.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_MOUSEMOVE: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseMove;
-        event.mods = PollActiveModifiers();
+        event.mods.setRawValue(PollActiveModifiers());
 
         // WM_MOUSEMOVE lParam contains client-area coordinates.
         event.mouseMove.x = GET_X_LPARAM(lParam);
         event.mouseMove.y = GET_Y_LPARAM(lParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 
     case WM_MOUSEWHEEL: {
-        input::FInputEvent event{};
+        input::SInputEvent event{};
         event.type = input::EInputEventType::MouseWheel;
-        event.mods = PollActiveModifiers();
+        event.mods.setRawValue(PollActiveModifiers());
 
         // WM_MOUSEWHEEL lParam is screen-space position.
         event.wheel.x = GET_X_LPARAM(lParam);
         event.wheel.y = GET_Y_LPARAM(lParam);
         event.wheel.delta = GET_WHEEL_DELTA_WPARAM(wParam);
 
-        inputHandler::getInstance().enqueueEvent(event);
+        input::InputHandler::getInstance().enqueueEvent(event);
         return 0;
     }
 

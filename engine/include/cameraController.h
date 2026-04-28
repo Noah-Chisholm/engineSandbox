@@ -1,14 +1,14 @@
 #pragma once
 
 #include "camera.h"
-#include "inputHandler.h"
+#include "input/inputHandler.h"
 #include "tickableInterface.h"
 
 class cameraController : public camera, public tickableInterface {
 public:
     cameraController(name _str, transform _transform, cameraData _data);
 
-    void handleInput(const FInputEvent& event);
+    void handleInput(const input::SInputEvent& event);
 
     virtual void init() override;
     virtual void tick(float dt) override;
@@ -30,5 +30,6 @@ private:
     float accel = 0.1f;
     float maxSpeed = 50.0f;
 
-    inputHandler::inputEventSig inputDel;
+    
+    input::InputHandler::InputEventSig inputDel;
 };

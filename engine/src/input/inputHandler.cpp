@@ -1,31 +1,27 @@
-#include "InputHandler.h"
+#include "input/InputHandler.h"
 #include "GameWindowHandler.h"
 
 using namespace input;
 
-bool inputHandler::dequeueEvent(FInputEvent& event) {
+bool InputHandler::dequeueEvent(SInputEvent& event) {
     return queuedEvents.dequeue(event);
 }
 
-bool inputHandler::enqueueEvent(const FInputEvent& event) {
+bool InputHandler::enqueueEvent(const SInputEvent& event) {
     return queuedEvents.enqueue(event);
 }
 
-inputHandler& inputHandler::getInstance() {
-    static inputHandler inst;
+InputHandler& InputHandler::getInstance() {
+    static InputHandler inst;
     return inst;
 }
 
-void inputHandler::handleAllEvents() {
-    FInputEvent eventToHandle{};
+void InputHandler::handleAllEvents() {
+    SInputEvent eventToHandle{};
 
     while (dequeueEvent(eventToHandle)) {
         switch (eventToHandle.type) {
-        case input::EInputEventType::Beg: {
-            break;
-        }
-
-        case input::EInputEventType::KeyDown: {
+        case EInputEventType::KeyDown: {
             auto oldState = keyStates[eventToHandle.key.vk];
 
             if (oldState == true) {
@@ -34,7 +30,7 @@ void inputHandler::handleAllEvents() {
 
             keyStates[eventToHandle.key.vk] = true;
 
-            uint8_t vk = static_cast<uint8_t>(eventToHandle.key.vk);
+            std::uint8_t vk = static_cast<std::uint8_t>(eventToHandle.key.vk);
             auto& eventsToCall = keyRegistrants[vk];
 
             for (auto it = eventsToCall.begin(); it != eventsToCall.end(); it++) {
@@ -48,7 +44,7 @@ void inputHandler::handleAllEvents() {
             break;
         }
 
-        case input::EInputEventType::KeyUp: {
+        case EInputEventType::KeyUp: {
             auto oldState = keyStates[eventToHandle.key.vk];
 
             if (oldState == false) {
@@ -57,7 +53,7 @@ void inputHandler::handleAllEvents() {
 
             keyStates[eventToHandle.key.vk] = false;
 
-            uint8_t vk = static_cast<uint8_t>(eventToHandle.key.vk);
+            std::uint8_t vk = static_cast<std::uint8_t>(eventToHandle.key.vk);
             auto& eventsToCall = keyRegistrants[vk];
 
             for (auto it = eventsToCall.begin(); it != eventsToCall.end(); it++) {
@@ -71,8 +67,8 @@ void inputHandler::handleAllEvents() {
             break;
         }
 
-        case input::EInputEventType::MouseDown: {
-            auto mouseIndex = static_cast<uint8_t>(eventToHandle.mouseBtn.button);
+        case EInputEventType::MouseDown: {
+            auto mouseIndex = static_cast<std::uint8_t>(eventToHandle.mouseBtn.button);
             auto oldState = mouseStates[mouseIndex];
 
             if (oldState == true) {
@@ -90,8 +86,8 @@ void inputHandler::handleAllEvents() {
             break;
         }
 
-        case input::EInputEventType::MouseUp: {
-            auto mouseIndex = static_cast<uint8_t>(eventToHandle.mouseBtn.button);
+        case EInputEventType::MouseUp: {
+            auto mouseIndex = static_cast<std::uint8_t>(eventToHandle.mouseBtn.button);
             auto oldState = mouseStates[mouseIndex];
 
             if (oldState == false) {
@@ -109,17 +105,17 @@ void inputHandler::handleAllEvents() {
             break;
         }
 
-        case input::EInputEventType::MouseMove: {
+        case EInputEventType::MouseMove: {
             auto& window = GameWindowHandler::getInstance();
 
             if (window.mouseLocked) {
                 POINT center = window.getClientCenterClientPosition();
 
-                const int32_t mouseX = static_cast<int32_t>(eventToHandle.mouseMove.x);
-                const int32_t mouseY = static_cast<int32_t>(eventToHandle.mouseMove.y);
+                const std::int32_t mouseX = static_cast<std::int32_t>(eventToHandle.mouseMove.x);
+                const std::int32_t mouseY = static_cast<std::int32_t>(eventToHandle.mouseMove.y);
 
-                const int32_t centerX = static_cast<int32_t>(center.x);
-                const int32_t centerY = static_cast<int32_t>(center.y);
+                const std::int32_t centerX = static_cast<std::int32_t>(center.x);
+                const std::int32_t centerY = static_cast<std::int32_t>(center.y);
 
                 eventToHandle.mouseMove.deltaX = mouseX - centerX;
                 eventToHandle.mouseMove.deltaY = mouseY - centerY;
@@ -134,8 +130,8 @@ void inputHandler::handleAllEvents() {
                 hasLastMousePosition = false;
             }
             else {
-                const int32_t mouseX = static_cast<int32_t>(eventToHandle.mouseMove.x);
-                const int32_t mouseY = static_cast<int32_t>(eventToHandle.mouseMove.y);
+                const std::int32_t mouseX = static_cast<std::int32_t>(eventToHandle.mouseMove.x);
+                const std::int32_t mouseY = static_cast<std::int32_t>(eventToHandle.mouseMove.y);
 
                 if (!hasLastMousePosition) {
                     lastMouseX = mouseX;
@@ -161,17 +157,13 @@ void inputHandler::handleAllEvents() {
             break;
         }
 
-        case input::EInputEventType::MouseWheel: {
+        case EInputEventType::MouseWheel: {
             eventToHandle.wheel.delta /= WHEEL_DELTA;
 
             for (auto it = mouseWheelRegistrants.begin(); it != mouseWheelRegistrants.end(); it++) {
                 (*it)(eventToHandle);
             }
 
-            break;
-        }
-
-        case input::EInputEventType::End: {
             break;
         }
 
@@ -182,27 +174,27 @@ void inputHandler::handleAllEvents() {
     }
 }
 
-bool inputHandler::registerForKeyEvent(uint32_t key, inputEventSig callBack) {
+bool InputHandler::registerForKeyEvent(uint32_t key, InputEventSig callBack) {
     keyRegistrants[key].push_back(callBack);
     return true;
 }
 
-bool inputHandler::registerForAnyKeyEvent(inputEventSig callBack) {
+bool InputHandler::registerForAnyKeyEvent(InputEventSig callBack) {
     anyKeyRegistrants.push_back(callBack);
     return true;
 }
 
-bool inputHandler::registerForMouseEvent(EMouseInputTypes event, inputEventSig callBack) {
+bool InputHandler::registerForMouseEvent(EMouseInputType event, InputEventSig callBack) {
     mouseButtonRegistrants[static_cast<uint8_t>(event)].push_back(callBack);
     return true;
 }
 
-bool inputHandler::registerForMouseMove(inputEventSig callBack) {
+bool InputHandler::registerForMouseMove(InputEventSig callBack) {
     mouseMoveRegistrants.push_back(callBack);
     return true;
 }
 
-bool inputHandler::registerForMouseWheel(inputEventSig callBack) {
+bool InputHandler::registerForMouseWheel(InputEventSig callBack) {
     mouseWheelRegistrants.push_back(callBack);
     return true;
 }

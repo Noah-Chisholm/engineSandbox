@@ -16,7 +16,7 @@ class engine {
 private:
     tickHandler& mainTickHandler = tickHandler::getHandler();
     GameWindowHandler& mainGameWindow = GameWindowHandler::getInstance();
-    inputHandler& mainInputHandler = inputHandler::getInstance();
+    input::InputHandler& mainInputHandler = input::InputHandler::getInstance();
     renderHandler& mainRenderHandler = renderHandler::getInstance();
 
 

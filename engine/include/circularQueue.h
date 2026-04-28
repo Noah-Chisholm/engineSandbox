@@ -10,7 +10,7 @@ enum class EOverflowResolutions {
 };
 
 template<typename T, std::uint32_t MaxEvents, EOverflowResolutions OverflowPolicy>
-class queue {
+class Queue {
     static_assert(MaxEvents > 0, "MaxEvents must be positive");
     static_assert((MaxEvents& (MaxEvents - 1)) == 0, "MaxEvents must be a power of two");
 

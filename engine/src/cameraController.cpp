@@ -6,7 +6,7 @@ cameraController::cameraController(name _str, transform _transform, cameraData _
 
 }
 
-void cameraController::handleInput(const FInputEvent& event) {
+void cameraController::handleInput(const input::SInputEvent& event) {
     if (event.type == input::EInputEventType::KeyDown ||
         event.type == input::EInputEventType::KeyUp) {
 
@@ -42,11 +42,9 @@ void cameraController::handleInput(const FInputEvent& event) {
     else if (event.type == input::EInputEventType::MouseWheel) {
         float speedIncrease = accel;
 
-        const bool shiftHeld =
-            (event.mods & input::EInputFlags::SHIFT) != 0;
+        const bool shiftHeld = event.mods.hasFlag(input::EInputFlag::SHIFT);
 
-        const bool controlHeld =
-            (event.mods & input::EInputFlags::CONTROL) != 0;
+        const bool controlHeld = event.mods.hasFlag(input::EInputFlag::CONTROL);
 
         if (shiftHeld && controlHeld) {
             speedIncrease *= 100.0f;
@@ -83,13 +81,13 @@ void cameraController::handleInput(const FInputEvent& event) {
 }
 
 void cameraController::init() {
-	inputDel = inputHandler::inputEventSig::Bind<cameraController, &cameraController::handleInput>(this);
-	inputHandler::getInstance().registerForKeyEvent('W', inputDel);
-	inputHandler::getInstance().registerForKeyEvent('A', inputDel);
-	inputHandler::getInstance().registerForKeyEvent('S', inputDel);
-	inputHandler::getInstance().registerForKeyEvent('D', inputDel);
-	inputHandler::getInstance().registerForMouseWheel(inputDel);
-	inputHandler::getInstance().registerForMouseMove(inputDel);
+	inputDel = input::InputHandler::InputEventSig::Bind<cameraController, &cameraController::handleInput>(this);
+	input::InputHandler::getInstance().registerForKeyEvent('W', inputDel);
+	input::InputHandler::getInstance().registerForKeyEvent('A', inputDel);
+    input::InputHandler::getInstance().registerForKeyEvent('S', inputDel);
+    input::InputHandler::getInstance().registerForKeyEvent('D', inputDel);
+    input::InputHandler::getInstance().registerForMouseWheel(inputDel);
+    input::InputHandler::getInstance().registerForMouseMove(inputDel);
 	setActive(true);
 }
 

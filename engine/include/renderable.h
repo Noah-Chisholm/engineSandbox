@@ -6,7 +6,7 @@
 #include "tickableInterface.h"
 #include "name.h"
 
-class renderable : public baseObject, public sceneInterface {
+class renderable : public baseObject, public sceneInterface, public tickableInterface {
 public:
 	renderable(name _Str, std::shared_ptr<meshDataGPU> _mesh, transform _transform);
 	void setVisible(bool newVisible);
@@ -16,9 +16,11 @@ public:
 	UINT8* mappedConstantBuffer = nullptr;
 
 	virtual void init() override;
+	virtual void tick(float dt) override;
 	DirectX::XMFLOAT4X4 makeModelMatrix(const transform& trans);
 
 private:
+	float scaleSpeed = 0.1;
 protected:
 	bool isVisible = false;
 };

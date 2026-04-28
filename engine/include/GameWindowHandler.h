@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-#include "InputHandler.h"
+#include "input/inputHandler.h"
 #include "engineEvents.h"
 
 class GameWindowHandler {
@@ -23,7 +23,7 @@ private:
 
     static uint8_t PollActiveModifiers();
 
-    queue<FengineEvent, 32, EOverflowResolutions::OVERWRITE_OLDEST> engineEvents;
+    Queue<FengineEvent, 32, EOverflowResolutions::OVERWRITE_OLDEST> engineEvents;
 
     bool enqueueEngineEvent(const FengineEvent& event);
 
