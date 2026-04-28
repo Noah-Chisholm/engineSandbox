@@ -6,9 +6,8 @@
 
 #include "TickHandler.h"
 #include "GameWindowHandler.h"
-#include "inputTester.h"
 #include "circularQueue.h"
-#include "renderHandler.h"
+#include "rendering/renderHandler.h"
 #include "engineEvents.h"
 #include "world.h"
 

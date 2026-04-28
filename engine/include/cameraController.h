@@ -6,7 +6,7 @@
 
 class cameraController : public camera, public tickableInterface {
 public:
-    cameraController(name _str, transform _transform, cameraData _data);
+    cameraController(core::Name _str, core::math::STransform _transform, cameraData _data);
 
     void handleInput(const input::SInputEvent& event);
 

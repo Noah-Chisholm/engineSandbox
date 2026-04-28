@@ -1,12 +1,12 @@
 #pragma once
 
-#include "rendering.h"
+#include "core/math/mathCommon.h"
 
 class sceneInterface {
 public:
-	sceneInterface(transform transformIn);
-	transform trans;
-	fVector getForwardVector() const;
-	fVector getRightVector() const;
-	fVector getUpVector() const;
+	sceneInterface(core::math::STransform transformIn);
+	core::math::STransform trans;
+	core::math::SVector getForwardVector() const;
+	core::math::SVector getRightVector() const;
+	core::math::SVector getUpVector() const;
 };

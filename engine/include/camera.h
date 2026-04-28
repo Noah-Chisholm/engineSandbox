@@ -1,8 +1,9 @@
 #pragma once
 
-#include "rendering.h"
+#include "rendering/renderingCommon.h"
 #include "baseObject.h"
 #include "sceneInterface.h"
+#include "core/math/mathCommon.h"
 
 class camera : public baseObject, public sceneInterface {
 public:
@@ -20,8 +21,8 @@ public:
             float inAspectRatio,
             float inNearPlane,
             float inFarPlane,
-            uint32_t renderWidth,
-            uint32_t renderHeight
+            std::uint32_t renderWidth,
+            std::uint32_t renderHeight
         )
             : fovYRadians(inFovYRadians),
             aspectRatio(inAspectRatio),
@@ -45,7 +46,7 @@ public:
         }
     };
 
-	camera(name _str, transform _transform, cameraData _data);
+	camera(core::Name _str, core::math::STransform _transform, cameraData _data);
 
 	cameraData data;
 

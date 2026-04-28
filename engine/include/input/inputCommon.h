@@ -20,7 +20,7 @@ namespace input {
 
     struct SInputEvent {
         EInputEventType type{};
-        FlagSet<EInputFlag> mods;
+        core::FlagSet<EInputFlag> mods;
 
         union {
             SKeyEvent key;

@@ -1,8 +1,8 @@
 #include "renderable.h"
-#include "renderHandler.h"
+#include "rendering/renderHandler.h"
 #include "logging.h"
 
-renderable::renderable(name _str, std::shared_ptr<meshDataGPU> _mesh, transform _transform)
+renderable::renderable(core::Name _str, std::shared_ptr<meshDataGPU> _mesh, core::math::STransform _transform)
 	: baseObject(_str),
 	sceneInterface(_transform),
 	mesh(_mesh)
@@ -23,10 +23,9 @@ void renderable::init() {
 	baseObject::init();
 	renderHandler::getInstance().createRenderableConstantBuffer(*this);
 	setVisible(true);
-	setActive(true);
 }
 
-DirectX::XMFLOAT4X4 renderable::makeModelMatrix(const transform& trans) {
+DirectX::XMFLOAT4X4 renderable::makeModelMatrix(const core::math::STransform& trans) {
 	DirectX::XMMATRIX scale =
 		DirectX::XMMatrixScaling(
 			trans.scale.x,
@@ -43,9 +42,9 @@ DirectX::XMFLOAT4X4 renderable::makeModelMatrix(const transform& trans) {
 
 	DirectX::XMMATRIX rotation =
 		DirectX::XMMatrixRotationRollPitchYaw(
-			trans.rotation.x,
-			trans.rotation.y,
-			trans.rotation.z
+			trans.rotation.pitch,
+			trans.rotation.yaw,
+			trans.rotation.roll
 		);
 
 	DirectX::XMMATRIX model =
@@ -55,11 +54,4 @@ DirectX::XMFLOAT4X4 renderable::makeModelMatrix(const transform& trans) {
 	DirectX::XMStoreFloat4x4(&result, model);
 
 	return result;
-}
-
-void renderable::tick(float dt) {
-	trans.scale += scaleSpeed;
-	if (trans.scale.x <= 0.25f || trans.scale.x >= 2.0f) {
-		scaleSpeed *= -1;
-	}
 }

@@ -1,15 +1,11 @@
 #pragma once
 
-#include <stdint.h>
-#include <unordered_map>
-#include <memory>
-#include <vector>
-#include "rendering.h"
-#include "renderable.h"
+#include "rendering/renderingCommon.h"
 #include "camera.h"
-#include "name.h"
 
 class renderable;
+
+using namespace rendering;
 
 class renderHandler {
 private:
@@ -19,7 +15,7 @@ private:
 public:
     static renderHandler& getInstance();
 
-    void init(uint32_t _width, uint32_t _height, HWND _renderWindow, std::shared_ptr<camera> _activeCamera);
+    void init(std::uint32_t _width, std::uint32_t _height, HWND _renderWindow, std::shared_ptr<camera> _activeCamera);
     void render();
     void cleanUp();
 
@@ -33,12 +29,12 @@ public:
 
 private:
     std::vector<std::shared_ptr<renderable>> renderables;
-    std::unordered_map<name, std::shared_ptr<meshDataGPU>, nameHasher> loadedMeshes;
+    std::unordered_map<core::Name, std::shared_ptr<meshDataGPU>, core::nameHasher> loadedMeshes;
 
-    static const uint8_t frameCount = 2;
+    static const std::uint8_t frameCount = 2;
 
-    uint32_t width = 0;
-    uint32_t height = 0;
+    std::uint32_t width = 0;
+    std::uint32_t height = 0;
     HWND renderWindow = nullptr;
     std::shared_ptr<camera> activeCamera;
 
@@ -67,10 +63,10 @@ private:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineState;
 
     // Synchronization objects.
-    uint32_t m_frameIndex = 0;
+    std::uint32_t m_frameIndex = 0;
     HANDLE m_fenceEvent = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
-    uint64_t m_fenceValue = 0;
+    std::uint64_t m_fenceValue = 0;
 
 private:
     void loadPipeline();

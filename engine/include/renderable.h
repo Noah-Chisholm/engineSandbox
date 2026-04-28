@@ -1,26 +1,23 @@
 #pragma once
 
-#include "rendering.h"
+#include "rendering/renderingCommon.h"
 #include "baseObject.h"
 #include "sceneInterface.h"
 #include "tickableInterface.h"
-#include "name.h"
 
-class renderable : public baseObject, public sceneInterface, public tickableInterface {
+class renderable : public baseObject, public sceneInterface {
 public:
-	renderable(name _Str, std::shared_ptr<meshDataGPU> _mesh, transform _transform);
+	renderable(core::Name _Str, std::shared_ptr<rendering::meshDataGPU> _mesh, core::math::STransform _transform);
 	void setVisible(bool newVisible);
 	
-	std::shared_ptr<meshDataGPU> mesh = nullptr;
+	std::shared_ptr<rendering::meshDataGPU> mesh = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12Resource> constantBuffer = nullptr;
-	UINT8* mappedConstantBuffer = nullptr;
+	std::uint8_t* mappedConstantBuffer = nullptr;
 
 	virtual void init() override;
-	virtual void tick(float dt) override;
-	DirectX::XMFLOAT4X4 makeModelMatrix(const transform& trans);
+	DirectX::XMFLOAT4X4 makeModelMatrix(const core::math::STransform& trans);
 
 private:
-	float scaleSpeed = 0.1;
 protected:
 	bool isVisible = false;
 };

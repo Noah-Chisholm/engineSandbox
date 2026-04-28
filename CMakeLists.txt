@@ -9,12 +9,12 @@ add_library(engineSandbox STATIC
   "engine/src/baseObject.cpp"
   "engine/src/tickableInterface.cpp"
   "engine/src/logging.cpp"
-  "engine/src/inputTester.cpp"
+  
   "engine/src/engine.cpp"
   "engine/src/world.cpp"
   "engine/src/rendering/renderHandler.cpp"
   "engine/src/renderble.cpp"
-  "engine/src/sceneInterface.cpp" "engine/src/camera.cpp" "engine/src/name.cpp" "engine/src/cameraController.cpp" )
+  "engine/src/sceneInterface.cpp" "engine/src/camera.cpp" "engine/src/core/name.cpp" "engine/src/cameraController.cpp" )
 
 target_compile_features(engineSandbox PUBLIC cxx_std_20)
 

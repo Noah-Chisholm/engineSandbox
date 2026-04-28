@@ -1,6 +1,6 @@
 #include "camera.h"
 
-camera::camera(name _str, transform _transform, cameraData _data)
+camera::camera(core::Name _str, core::math::STransform _transform, cameraData _data)
 	: baseObject(_str),
 	sceneInterface(_transform),
 	data(_data)
@@ -14,7 +14,7 @@ DirectX::XMMATRIX camera::makeViewMatrix() const {
         trans.location.z,
         1.0f
     );
-    fVector forwardVector = getForwardVector();
+    core::math::SVector forwardVector = getForwardVector();
     DirectX::XMVECTOR forwardDirection = DirectX::XMVectorSet(
         forwardVector.x,
         forwardVector.y,
@@ -22,7 +22,7 @@ DirectX::XMMATRIX camera::makeViewMatrix() const {
         0.0f
     );
 
-    fVector upVector = getUpVector();
+    core::math::SVector upVector = getUpVector();
     DirectX::XMVECTOR upDirection = DirectX::XMVectorSet(
         upVector.x,
         upVector.y,

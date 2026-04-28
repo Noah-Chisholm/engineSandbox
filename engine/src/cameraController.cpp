@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "logging.h"
 
-cameraController::cameraController(name _str, transform _transform, cameraData _data) : camera(_str, _transform, _data) {
+cameraController::cameraController(core::Name _str, core::math::STransform _transform, cameraData _data) : camera(_str, _transform, _data) {
 
 }
 
@@ -74,9 +74,9 @@ void cameraController::handleInput(const input::SInputEvent& event) {
             pitchLimit
         );
         logging::log("rotation: {}\n", trans.rotation);
-        trans.rotation.x = pitchRadians;
-        trans.rotation.y = yawRadians;
-        trans.rotation.z = 0.0f;
+        trans.rotation.pitch = pitchRadians;
+        trans.rotation.yaw = yawRadians;
+        trans.rotation.roll = 0.0f;
     }
 }
 
@@ -109,6 +109,6 @@ void cameraController::tick(float dt) {
     trans.location += getRightVector() *
         (static_cast<float>(rightState) * frameMoveSpeed);
 
-    trans.location += fVector(0.0f, 1.0f, 0.0f) *
+    trans.location += core::math::SVector(0.0f, 1.0f, 0.0f) *
         (static_cast<float>(upState) * frameMoveSpeed);
 }

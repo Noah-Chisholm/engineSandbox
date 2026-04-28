@@ -16,7 +16,7 @@ void engine::gameplayLoop() {
     
 void engine::startEngine() {
     activeWorld = std::make_unique<world>();
-    transform defaultCameraTrans = { fVector(), fVector(), fVector()};
+    core::math::STransform defaultCameraTrans;
     float defaultFovYRadians = std::numbers::pi * 60.0f / 180.0f; // 60 degrees
     float defaultAspectRatio = static_cast<float>(defaultWindowW) / static_cast<float>(defaultWindowH);
     float defaultNearPlane = 0.1f;
@@ -30,12 +30,12 @@ void engine::startEngine() {
         defaultWindowW,
         defaultWindowH
     );
-    auto defaultCamera = static_pointer_cast<camera>(activeWorld->spawnObject<cameraController>(nullptr, name("mainCamera"), defaultCameraTrans, defaultCameraData));
+    auto defaultCamera = static_pointer_cast<camera>(activeWorld->spawnObject<cameraController>(nullptr, core::Name("mainCamera"), defaultCameraTrans, defaultCameraData));
     mainRenderHandler.init(defaultWindowW, defaultWindowH, mainGameWindow.initWindow(defaultWindowW, defaultWindowH), defaultCamera);
     
-    transform testTriTrans = { fVector(0.0f,0.0f,10.0f), fVector((45 * std::numbers::pi / 180),0.0f,0.0f), fVector(1.0f, 1.0f, 1.0f) };
+    core::math::STransform testTriTrans = { core::math::SVector(0.0f,0.0f,10.0f), core::math::SRotator((45 * std::numbers::pi / 180),0.0f,0.0f), core::math::SVector(1.0f, 1.0f, 1.0f) };
     meshDataCPU testCube = {
-        name("cubeModel"),
+        core::Name("cubeModel"),
         {
             // Front face, z = -0.5
             { { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // 0 top-left
@@ -76,9 +76,7 @@ void engine::startEngine() {
         }
     };
 
-    activeWorld->spawnObject<renderable>(nullptr, name("testTri"), mainRenderHandler.createGpuMesh(testCube), testTriTrans);
-    
-    activeWorld->spawnObject<inputTester>(nullptr, name("Tester"));
+    activeWorld->spawnObject<renderable>(nullptr, core::Name("testTri"), mainRenderHandler.createGpuMesh(testCube), testTriTrans);
     gameplayLoop();
 }
 

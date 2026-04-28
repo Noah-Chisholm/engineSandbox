@@ -1,6 +1,6 @@
 #include "baseObject.h"
 
-baseObject::baseObject(name _str) : _name(_str) {
+baseObject::baseObject(core::Name _str) : _name(_str) {
 }
 
 std::string baseObject::toString() {

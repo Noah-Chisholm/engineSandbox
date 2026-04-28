@@ -1,10 +1,11 @@
-#include "name.h"
-
+#include "core/Name.h"
 #include <stdexcept>
 
-std::unordered_map<std::uint64_t, std::string> name::hashTable{};
+using namespace core;
 
-name::name(const std::string& inString) {
+std::unordered_map<std::uint64_t, std::string> Name::hashTable{};
+
+Name::Name(const std::string& inString) {
     hash = computeHash(inString);
 
     auto found = hashTable.find(hash);
@@ -25,11 +26,11 @@ name::name(const std::string& inString) {
     }
 }
 
-std::uint64_t name::getHash() const {
+std::uint64_t Name::getHash() const {
     return hash;
 }
 
-std::uint64_t name::computeHash(const std::string& inString) {
+std::uint64_t Name::computeHash(const std::string& inString) {
     std::uint64_t hashValue = 0;
     std::uint64_t pPow = 1;
 
@@ -43,7 +44,7 @@ std::uint64_t name::computeHash(const std::string& inString) {
     return hashValue;
 }
 
-std::uint64_t name::charToValue(char c, const std::string& fullString, std::size_t index) {
+std::uint64_t Name::charToValue(char c, const std::string& fullString, std::size_t index) {
     if (c >= 'a' && c <= 'z') {
         return static_cast<std::uint64_t>(c - 'a' + 1);
     }
@@ -74,7 +75,7 @@ std::uint64_t name::charToValue(char c, const std::string& fullString, std::size
     );
 }
 
-const std::string& name::getString() const {
+const std::string& Name::getString() const {
     auto found = hashTable.find(hash);
 
     if (found == hashTable.end()) {
@@ -84,6 +85,6 @@ const std::string& name::getString() const {
     return found->second;
 }
 
-bool name::operator==(const name& other) const {
+bool Name::operator==(const Name& other) const {
     return hash == other.hash;
 }

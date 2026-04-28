@@ -2,11 +2,11 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "name.h"
+#include "core/Name.h"
 
 class baseObject : public std::enable_shared_from_this<baseObject> {
 public:
-	baseObject(name str);
+	baseObject(core::Name str);
 	std::string toString();
 	virtual void init();
 
@@ -27,7 +27,7 @@ public:
 protected:
 	float HeavyComputations(int numIterations);
 
-	name _name;
+	core::Name _name;
 private:
 	std::vector<std::shared_ptr<baseObject>> children;
 };

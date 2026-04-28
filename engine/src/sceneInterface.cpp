@@ -1,16 +1,16 @@
 #include "sceneInterface.h"
+#include <DirectXMath.h>
 
-
-sceneInterface::sceneInterface(transform _transform) {
+sceneInterface::sceneInterface(core::math::STransform _transform) {
 	trans = _transform;
 }
 
-fVector sceneInterface::getForwardVector() const {
+core::math::SVector sceneInterface::getForwardVector() const {
     DirectX::XMMATRIX rotation =
         DirectX::XMMatrixRotationRollPitchYaw(
-            trans.rotation.x, // pitch
-            trans.rotation.y, // yaw
-            trans.rotation.z  // roll
+            trans.rotation.pitch, // pitch
+            trans.rotation.yaw, // yaw
+            trans.rotation.roll  // roll
         );
 
     DirectX::XMVECTOR localForward =
@@ -22,19 +22,19 @@ fVector sceneInterface::getForwardVector() const {
     DirectX::XMFLOAT3 storedForward;
     DirectX::XMStoreFloat3(&storedForward, worldForward);
 
-    return fVector(
+    return core::math::SVector(
         storedForward.x,
         storedForward.y,
         storedForward.z
     );
 }
 
-fVector sceneInterface::getRightVector() const {
+core::math::SVector sceneInterface::getRightVector() const {
     DirectX::XMMATRIX rotation =
         DirectX::XMMatrixRotationRollPitchYaw(
-            trans.rotation.x, // pitch
-            trans.rotation.y, // yaw
-            trans.rotation.z  // roll
+            trans.rotation.pitch, // pitch
+            trans.rotation.yaw, // yaw
+            trans.rotation.roll  // roll
         );
 
     DirectX::XMVECTOR localRight =
@@ -46,19 +46,19 @@ fVector sceneInterface::getRightVector() const {
     DirectX::XMFLOAT3 storedRight;
     DirectX::XMStoreFloat3(&storedRight, worldRight);
 
-    return fVector(
+    return core::math::SVector(
         storedRight.x,
         storedRight.y,
         storedRight.z
     );
 }
 
-fVector sceneInterface::getUpVector() const {
+core::math::SVector sceneInterface::getUpVector() const {
     DirectX::XMMATRIX rotation =
         DirectX::XMMatrixRotationRollPitchYaw(
-            trans.rotation.x, // pitch
-            trans.rotation.y, // yaw
-            trans.rotation.z  // roll
+            trans.rotation.pitch, // pitch
+            trans.rotation.yaw, // yaw
+            trans.rotation.roll  // roll
         );
 
     DirectX::XMVECTOR localUp =
@@ -70,7 +70,7 @@ fVector sceneInterface::getUpVector() const {
     DirectX::XMFLOAT3 storedRight;
     DirectX::XMStoreFloat3(&storedRight, worldUp);
 
-    return fVector(
+    return core::math::SVector(
         storedRight.x,
         storedRight.y,
         storedRight.z
