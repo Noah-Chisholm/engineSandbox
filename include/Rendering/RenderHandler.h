@@ -25,10 +25,12 @@ namespace Rendering {
         void updateRenderableConstantBuffer(GameObjects::Renderable& item);
 
         std::shared_ptr<SMeshDataGPU> createGpuMesh(const Assets::SMeshDataCPU& meshData);
+        std::shared_ptr<SMaterialGpuData> createGpuMaterial(const Assets::SMaterialDataCPU& materialData);
 
     private:
         std::vector<std::shared_ptr<GameObjects::Renderable>> renderables;
         std::unordered_map<Core::Name, std::shared_ptr<SMeshDataGPU>, Core::Name::NameHasher> loadedMeshes;
+        std::unordered_map<Core::Name, std::shared_ptr<SMaterialGpuData>, Core::Name::NameHasher> loadedMaterials;
 
         static const std::uint8_t frameCount = 2;
 

@@ -1,6 +1,7 @@
 cbuffer RenderableConstants : register(b0)
 {
 	row_major float4x4 projectedModelViewMatrix;
+	float4 materialBaseColor;
 };
 
 struct VSInput

@@ -6,6 +6,7 @@
 #include <cstddef>
 
 #include "ThirdParty/Rendering/d3dx12.h"
+#include "Assets/SMaterialDataCPU.h"
 
 namespace Rendering {
 	struct SMeshDataGPU {
@@ -20,5 +21,6 @@ namespace Rendering {
 
 	struct SRenderableConstants {
 		DirectX::XMFLOAT4X4 projectedModelViewMatrix;
+		Assets::SMaterialConstants materialConstants;
 	};
 }

@@ -1,4 +1,5 @@
 #pragma once
 
-#include "Rendering/MeshDataGPU.h"
+#include "Rendering/SMeshDataGPU.h"
 #include "Rendering/Vertex.h"
+#include "Rendering/SMaterialDataGPU.h"

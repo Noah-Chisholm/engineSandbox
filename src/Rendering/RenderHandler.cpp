@@ -369,6 +369,7 @@ void RenderHandler::populateCommandList() {
         }
 
         updateRenderableConstantBuffer(*item);
+        m_commandList->SetPipelineState(item->material->pipelineState.Get());
 
         m_commandList->SetGraphicsRootConstantBufferView(
             0,
@@ -579,6 +580,63 @@ std::shared_ptr<SMeshDataGPU> RenderHandler::createGpuMesh(const Assets::SMeshDa
     return result;
 }
 
+std::shared_ptr<SMaterialGpuData> RenderHandler::createGpuMaterial(const Assets::SMaterialDataCPU& materialData) {
+    auto mapResult = loadedMaterials.find(materialData.materialName);
+    if (mapResult != loadedMaterials.end()) {
+        return mapResult->second;
+    }
+
+    if (m_device == nullptr) {
+        throw std::runtime_error("createGpuMaterial called before m_device was initialized.");
+    }
+
+    auto result = std::make_shared<SMaterialGpuData>();
+    result->description = materialData;
+
+    // Create the pipeline state, which includes compiling and loading shaders.
+    {
+        Microsoft::WRL::ComPtr<ID3DBlob> vertexShader;
+        Microsoft::WRL::ComPtr<ID3DBlob> pixelShader;
+
+        UINT compileFlags = 0;
+
+        ThrowIfFailed(D3DCompileFromFile(materialData.PSPath, nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr));
+        ThrowIfFailed(D3DCompileFromFile(materialData.VSPath, nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr));
+
+        // Define the vertex input layout.
+        D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
+        {
+            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+            { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+        };
+
+        // Describe and create the graphics pipeline state object (PSO).
+        D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
+        psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
+        psoDesc.pRootSignature = m_rootSignature.Get();
+        psoDesc.VS = { reinterpret_cast<UINT8*>(vertexShader->GetBufferPointer()), vertexShader->GetBufferSize() };
+        psoDesc.PS = { reinterpret_cast<UINT8*>(pixelShader->GetBufferPointer()), pixelShader->GetBufferSize() };
+        psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+        psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+        psoDesc.DepthStencilState.DepthEnable = TRUE;
+        psoDesc.DepthStencilState.StencilEnable = FALSE;
+        psoDesc.SampleMask = UINT_MAX;
+        psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+        psoDesc.NumRenderTargets = 1;
+        psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+        psoDesc.SampleDesc.Count = 1;
+        psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+        psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+        psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+        psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+
+        ThrowIfFailed(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&result->pipelineState)));
+    }
+
+    loadedMaterials.emplace(materialData.materialName, result);
+    return result;
+}
+
 void RenderHandler::createRenderableConstantBuffer(GameObjects::Renderable& item) {
     if (m_device == nullptr) {
         throw std::runtime_error("Cannot create renderable constant buffer before D3D12 device exists.");
@@ -638,6 +696,8 @@ void RenderHandler::updateRenderableConstantBuffer(GameObjects::Renderable& item
         &constants.projectedModelViewMatrix,
         modelViewProjection
     );
+
+    constants.materialConstants = item.material->description.constants;
 
     std::memcpy(
         item.mappedConstantBuffer,

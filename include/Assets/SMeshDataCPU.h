@@ -8,7 +8,7 @@
 
 namespace Assets {
 	struct SMeshDataCPU {
-		Core::Name key;
+		Core::Name key{};
 		std::vector<Rendering::SVertex> verts;
 		std::vector<std::uint32_t> indices;
 	};

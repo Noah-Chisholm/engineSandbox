@@ -3,6 +3,8 @@
 #include "Engine/EngineHandler.h"
 #include "GameObjects/CameraController.h"
 #include "GameObjects/Renderable.h"
+#include "Assets/MeshLoader.h"
+#include "Assets/SMaterialDataCPU.h"
 
 using namespace Engine;
 
@@ -36,50 +38,43 @@ void EngineHandler::startEngine() {
     auto defaultCamera = static_pointer_cast<GameObjects::Camera>(activeWorld->spawnObject<GameObjects::CameraController>(nullptr, Core::Name("mainCamera"), defaultCameraTrans, defaultCameraData));
     mainRenderHandler.init(defaultWindowW, defaultWindowH, mainGameWindow.initWindow(defaultWindowW, defaultWindowH), defaultCamera);
     
-    Core::Math::STransform testTriTrans = { Core::Math::SVector(0.0f,0.0f,10.0f), Core::Math::SRotator((45 * std::numbers::pi / 180),0.0f,0.0f), Core::Math::SVector(1.0f, 1.0f, 1.0f) };
-    Assets::SMeshDataCPU testCube = {
-        Core::Name("cubeModel"),
-        {
-            // Front face, z = -0.5
-            { { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // 0 top-left
-            { {  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } }, // 1 top-right
-            { {  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } }, // 2 bottom-right
-            { { -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } }, // 3 bottom-left
-
-            // Back face, z = 0.5
-            { { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } }, // 4 top-left
-            { {  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } }, // 5 top-right
-            { {  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f } }, // 6 bottom-right
-            { { -0.5f, -0.5f,  0.5f }, { 0.3f, 0.3f, 0.3f, 1.0f } }  // 7 bottom-left
-        },
-        {
-            // Front face
-            0, 1, 2,
-            0, 2, 3,
-
-            // Right face
-            1, 5, 6,
-            1, 6, 2,
-
-            // Back face
-            5, 4, 7,
-            5, 7, 6,
-
-            // Left face
-            4, 0, 3,
-            4, 3, 7,
-
-            // Top face
-            4, 5, 1,
-            4, 1, 0,
-
-            // Bottom face
-            3, 2, 6,
-            3, 6, 7
-        }
+    Core::Math::STransform testTriTrans = { Core::Math::SVector(0.0f,0.0f,10.0f), Core::Math::SRotator(0.0f,0.0f,0.0f), Core::Math::SVector(1.0f, 1.0f, 1.0f) };
+    Assets::SMeshDataCPU testCube{};
+    Assets::SMeshDataCPU testDresser{};
+    Assets::SMeshDataCPU testCouch{};
+    Assets::SMaterialDataCPU green{
+        Core::Name("solidGreen")
     };
-
-    activeWorld->spawnObject<GameObjects::Renderable>(nullptr, Core::Name("testTri"), mainRenderHandler.createGpuMesh(testCube), testTriTrans);
+    green.constants.baseColor = Core::Colors::GREEN;
+    Assets::SMaterialDataCPU blue{
+        Core::Name("solidBlue")
+    };
+    blue.constants.baseColor = Core::Colors::BLUE;
+    Assets::SMaterialDataCPU red{
+        Core::Name("solidRed")
+    };
+    red.constants.baseColor = Core::Colors::RED;
+    Assets::SMaterialDataCPU white{
+        Core::Name("solidWhite")
+    };
+    Assets::SMaterialDataCPU noMat{
+        Core::Name("noMat")
+    };
+    noMat.PSPath = L"D:\\personal one drive\\OneDrive\\Documents\\engineSandbox\\data\\shaders\\pixel\\pixelShader.hlsl";
+    if (Assets::MeshLoader::loadFile(R"(D:\personal one drive\OneDrive\Documents\engineSandbox\data\sampleModels\couch.bin)", testCouch)) {
+        Assets::MeshLoader::loadFile(R"(D:\personal one drive\OneDrive\Documents\engineSandbox\data\sampleModels\unitCube.bin)", testCube);
+        Assets::MeshLoader::loadFile(R"(D:\personal one drive\OneDrive\Documents\engineSandbox\data\sampleModels\dresser.bin)", testDresser);
+        activeWorld->spawnObject<GameObjects::Renderable>(nullptr, Core::Name("testTri"), mainRenderHandler.createGpuMesh(testCouch), testTriTrans, mainRenderHandler.createGpuMaterial(blue));
+        testTriTrans.location += Core::Math::SVector(0.0f, 0.0f, 25.0f);
+        activeWorld->spawnObject<GameObjects::Renderable>(nullptr, Core::Name("testTri"), mainRenderHandler.createGpuMesh(testDresser), testTriTrans, mainRenderHandler.createGpuMaterial(noMat));
+        testTriTrans.location += Core::Math::SVector(0.0f, 0.0f, 25.0f);
+        activeWorld->spawnObject<GameObjects::Renderable>(nullptr, Core::Name("testTri"), mainRenderHandler.createGpuMesh(testDresser), testTriTrans, mainRenderHandler.createGpuMaterial(green));
+        testTriTrans.location += Core::Math::SVector(0.0f, 0.0f, 25.0f);
+        testTriTrans.scale += Core::Math::SVector(5.0f);
+        activeWorld->spawnObject<GameObjects::Renderable>(nullptr, Core::Name("testTri"), mainRenderHandler.createGpuMesh(testCube), testTriTrans, mainRenderHandler.createGpuMaterial(white));
+        testTriTrans.location += Core::Math::SVector(0.0f, 0.0f, 25.0f);
+        activeWorld->spawnObject<GameObjects::Renderable>(nullptr, Core::Name("testTri"), mainRenderHandler.createGpuMesh(testCube), testTriTrans, mainRenderHandler.createGpuMaterial(red));
+    }
     gameplayLoop();
 }
 

@@ -6,6 +6,10 @@ using namespace Core;
 
 std::unordered_map<std::uint64_t, std::string> Name::hashTable{};
 
+Name::Name() {
+    hash = 0;
+}
+
 Name::Name(const std::string& inString) {
     hash = computeHash(inString);
 
@@ -77,6 +81,9 @@ std::uint64_t Name::charToValue(char c, const std::string& fullString, std::size
 }
 
 const std::string& Name::getString() const {
+    if (hash == 0) {
+        return "Name Unitilized.";
+    }
     auto found = hashTable.find(hash);
 
     if (found == hashTable.end()) {
@@ -87,5 +94,7 @@ const std::string& Name::getString() const {
 }
 
 bool Name::operator==(const Name& other) const {
+    if (hash + other.hash == 0)
+        return false;
     return hash == other.hash;
 }

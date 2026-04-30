@@ -7,6 +7,8 @@
 namespace Core {
     class Name {
     public:
+        explicit Name();
+
         explicit Name(const std::string& inString);
 
         std::uint64_t getHash() const;

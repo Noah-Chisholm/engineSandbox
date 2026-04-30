@@ -4,10 +4,11 @@
 
 using namespace GameObjects;
 
-Renderable::Renderable(Core::Name _str, std::shared_ptr<Rendering::SMeshDataGPU> _mesh, Core::Math::STransform _transform)
+Renderable::Renderable(Core::Name _str, std::shared_ptr<Rendering::SMeshDataGPU> _mesh, Core::Math::STransform _transform, std::shared_ptr<Rendering::SMaterialGpuData> _material)
 	: BaseObject(_str),
 	SceneInterface(_transform),
-	mesh(_mesh)
+	mesh(_mesh),
+	material(_material)
 {
 }
 
